@@ -1,0 +1,120 @@
+.header {
+  background-color: white;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.container {
+  margin-left: 5rem;
+  margin-right: 5rem;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1280px;
+}
+
+.logoWrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logoImage {
+  height: 3rem;
+  width: auto;
+  transition: opacity 0.2s;
+}
+.logoImage:hover {
+  opacity: 0.8;
+}
+
+.logoText {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: black;
+}
+@media (max-width: 640px) {
+  .logoText {
+    display: none;
+  }
+}
+
+.navDesktop {
+  display: none;
+}
+@media (min-width: 768px) {
+  .navDesktop {
+    display: block;
+  }
+}
+
+.navList {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #15803d;
+}
+
+.navLink {
+  transition: color 0.2s;
+}
+.navLink:hover {
+  color: #16a34a;
+}
+.activeLink {
+  border-bottom: 2px solid #15803d;
+}
+
+/* --- Menu Mobile --- */
+.menuButton {
+  display: block;
+  border: none;
+  background: none;
+  color: #15803d;
+  cursor: pointer;
+}
+@media (min-width: 768px) {
+  .menuButton {
+    display: none;
+  }
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 40;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.navMobile {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 60%;
+  max-width: 280px;
+  height: 100%;
+  background-color: white;
+  z-index: 50;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+/* Estado ativo do menu mobile */
+.menuOpen .overlay {
+  opacity: 1;
+  visibility: visible;
+}
+.menuOpen .navMobile {
+  transform: translateX(0);
+}
