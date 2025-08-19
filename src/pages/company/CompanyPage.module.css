@@ -1,0 +1,39 @@
+.companySection {
+  max-width: 900px;
+  margin: 3rem auto;
+  padding: 1.5rem;
+  background: #f9fafb;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.06);
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1e40af;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.text {
+  font-size: 1.15rem;
+  color: #374151;
+  line-height: 1.7;
+  text-align: left;
+}
+
+.companyBg {
+  min-height: 100vh;
+  width: 100%;
+  background: linear-gradient(90deg, #bfdbfe 0%, #bbf7d0 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 40px;
+}
+@media (max-width: 768px) {
+  .companyBg {
+    padding-bottom: 80px;
+  }
+}
+
