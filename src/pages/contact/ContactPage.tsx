@@ -1,85 +1,154 @@
+// src/pages/ContactPage.tsx
 import { useState } from 'react';
 import SEO from '../../components/SEO';
+import Modal from '../../components/modals/Modal';
+import { sendContactEmail, type ContactFormData } from '../../services/emailService';
 import styles from './ContactPage.module.css';
 
 export default function ContactPage() {
-    const [status, setStatus] = useState('');
+    const [formData, setFormData] = useState<ContactFormData>({ name: '', email: '', phone: '', subject: '', message: '' });
+    const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
 
-    async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-        event.preventDefault();
-        setStatus('Enviando...');
+    // Simple phone formatter: keeps only digits and formats as (##) #####-#### or (##) ####-####
+    const formatPhone = (value: string) => {
+        const digits = value.replace(/\D/g, '');
+        if (digits.length <= 2) return digits;
+        if (digits.length <= 6) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+        if (digits.length <= 10) return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
+        return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7, 11)}`;
+    };
 
-        const form = event.currentTarget;
-        const data = new FormData(form);
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
 
+    const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const raw = e.target.value;
+        const formatted = formatPhone(raw);
+        setFormData(prev => ({ ...prev, phone: formatted }));
+    };
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (status === 'sending') return; // prevent double submit
+        setStatus('sending');
         try {
-            const response = await fetch('https://formspree.io/f/YOUR_UNIQUE_CODE', {
-                method: 'POST',
-                body: data,
-                headers: {
-                    'Accept': 'application/json'
-                }
-            });
-
-            if (response.ok) {
-                setStatus('Mensagem enviada com sucesso!');
-                form.reset();
+            const result = await sendContactEmail(formData);
+            if (result.success) {
+                setStatus('success');
+                // clear form
+                setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+                // auto-close modal after 4s
+                setTimeout(() => setStatus('idle'), 4000);
             } else {
-                setStatus('Ocorreu um erro ao enviar. Tente novamente.');
+                setStatus('error');
+                setTimeout(() => setStatus('idle'), 5000);
             }
-        } catch (error) {
-            console.error(error);
-            setStatus('Ocorreu um erro de rede. Tente novamente.');
+        } catch (err) {
+            console.error('Erro ao enviar contato:', err);
+            setStatus('error');
+            setTimeout(() => setStatus('idle'), 5000);
         }
-    }
+    };
+
+    const closeModal = () => setStatus('idle');
 
     return (
         <>
-            <SEO
-                title="Contact"
-                description="FDS Logística: especialista em mudanças residenciais e comerciais, transporte de equipamentos sensíveis, armazenagem e terceirização de mão de obra."
-            />
-            <div className={styles.pageContainer}>
-                <h1 className={styles.title}>Entre em Contato</h1>
+            <SEO title="Contato" description="Entre em contato com a FDS Logística." />
+
+            <div className={styles.pageWrapper}>
                 <div className={styles.grid}>
-                    {/* Lado das Informações */}
-                    <div className={styles.infoSide}>
-                        <h2>Nossas Informações</h2>
-                        <div className={styles.infoBlock}>
-                            <strong>Endereço</strong>
-                            <p>Rua Palhoça, 398, Guarulhos, SP, 07241-010</p>
-                        </div>
-                        <div className={styles.infoBlock}>
-                            <strong>Telefone</strong>
-                            <p><a href="tel:+551123589716">+55 (11) 2358-9716</a></p>
-                        </div>
-                        <div className={styles.infoBlock}>
-                            <strong>Email</strong>
-                            <p><a href="mailto:contato@fdslogistica.com.br">contato@fdslogistica.com.br</a></p>
-                        </div>
-                        <div className={styles.infoBlock}>
-                            <strong>Horário de Funcionamento</strong>
-                            <p>Seg-Sex: 08:00 - 18:00</p>
-                            <p>Sáb: 08:00 - 12:00</p>
-                        </div>
+                    {/* Lado Esquerdo: Formulário */}
+                    <div className={styles.card}>
+                        <h1 className={styles.title}>Contato</h1>
+                        <p style={{ textAlign: 'center', marginBottom: '1.5rem' }}>Para entrar em contato, preencha o formulário abaixo ou envie sua mensagem para o email: <strong>contato@fdslogistica.com.br</strong></p>
+                        <form onSubmit={handleSubmit} className={styles.form}>
+                            <div className={styles.formGrid}>
+                                <div className={styles.formGroup}><label htmlFor="name" className={styles.label}>Nome *</label><input id="name" name="name" type="text" placeholder="Seu nome" value={formData.name} onChange={handleChange} className={styles.input} required /></div>
+                                <div className={styles.formGroup}><label htmlFor="email" className={styles.label}>E-mail *</label><input id="email" name="email" type="email" placeholder="seu@exemplo.com" value={formData.email} onChange={handleChange} className={styles.input} required /></div>
+                                <div className={styles.formGroup}><label htmlFor="phone" className={styles.label}>Telefone *</label><input id="phone" name="phone" type="tel" placeholder="(11) 9xxxx-xxxx" value={formData.phone} onChange={handlePhoneChange} className={styles.input} maxLength={16} required /></div>
+                                <div className={styles.formGroup}><label htmlFor="subject" className={styles.label}>Assunto *</label><input id="subject" name="subject" type="text" placeholder="Assunto da mensagem" value={formData.subject} onChange={handleChange} className={styles.input} required /></div>
+                            </div>
+                            <div className={`${styles.formGroup} ${styles.fullWidth}`}><label htmlFor="message" className={styles.label}>Mensagem *</label><textarea id="message" name="message" placeholder="Descreva sua dúvida, solicitação ou comentário..." value={formData.message} onChange={handleChange} rows={6} className={styles.textarea} required></textarea></div>
+                            <div className={`${styles.buttonRow} ${styles.fullWidth}`}>
+                                <button type="submit" className={styles.smallButton} disabled={status === 'sending'}>{status === 'sending' ? 'Enviando...' : 'Enviar Mensagem'}</button>
+                            </div>
+                        </form>
                     </div>
 
-                    {/* Lado do Formulário */}
-                    <div className={styles.formSide}>
-                        <h2>Envie uma Mensagem</h2>
-                        <form className={styles.form} onSubmit={handleSubmit}>
-                            <input className={styles.input} type="text" name="name" placeholder="Seu Nome" required />
-                            <input className={styles.input} type="email" name="email" placeholder="Seu E-mail" required />
-                            <input className={styles.input} type="tel" name="phone" placeholder="Seu Telefone" />
-                            <textarea className={styles.textarea} name="message" placeholder="Sua Mensagem" required></textarea>
-                            <button className={styles.button} type="submit" disabled={status === 'Enviando...'}>
-                                {status === 'Enviando...' ? 'Enviando...' : 'Enviar'}
-                            </button>
-                            {status && <p className={`${styles.statusMessage} ${status.includes('sucesso') ? styles.success : styles.error}`}>{status}</p>}
-                        </form>
+                    {/* Lado Direito: Informações */}
+                    <div className={styles.card}>
+                        <h2 className={styles.infoSide_h2}>FDS Logística</h2>
+
+                        <div className={styles.infoBlock}>
+                            <div className={styles.infoRow}>
+                                <span className={styles.infoIcon}>📞</span>
+                                <div className={styles.infoContent}>
+                                    <strong>Telefone</strong>
+                                    <div>11 2358-9716</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className={styles.infoBlock}>
+                            <div className={styles.infoRow}>
+                                <span className={styles.infoIcon}>✉️</span>
+                                <div className={styles.infoContent}>
+                                    <strong>E-mail</strong>
+                                    <div>contato@fdslogistica.com.br</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className={styles.infoBlock}>
+                            <div className={styles.infoRow}>
+                                <span className={styles.infoIcon}>📍</span>
+                                <div className={styles.infoContent}>
+                                    <strong>Endereço</strong>
+                                    <div>Rua Palhoça, 398<br />Cumbica - Parque Industrial<br />Guarulhos/SP<br />CEP 07241-010</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className={styles.infoBlock}>
+                            <div className={styles.infoRow}>
+                                <span className={styles.infoIcon}>🕒</span>
+                                <div className={styles.infoContent}>
+                                    <strong>Horário de Atendimento</strong>
+                                    <div>Segunda a Sexta: 8h às 18h<br />Sábado: 8h às 12h</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className={styles.infoBlock}>
+                            <div className={styles.infoRow}>
+                                <span className={styles.infoIcon}>📌</span>
+                                <div className={styles.infoContent}>
+                                    <strong>Localização</strong>
+                                </div>
+                            </div>
+                            <div className={styles.mapContainer}>
+                                <iframe
+                                    title="Mapa FDS Logística"
+                                    className={styles.mapIframe}
+                                    src="https://www.google.com/maps?q=Rua+Palho%C3%A7a+398+Guarulhos+SP&hl=pt&z=15&output=embed"
+                                    loading="lazy"
+                                ></iframe>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <Modal isOpen={status === 'success'} onClose={closeModal} title="Mensagem Enviada!" type="success">
+                <p>Sua mensagem foi recebida. Nossa equipe entrará em contato em breve.</p>
+            </Modal>
+
+            <Modal isOpen={status === 'error'} onClose={closeModal} title="Erro no Envio" type="error">
+                <p>Ocorreu um erro. Por favor, tente novamente ou entre em contato por outro canal.</p>
+            </Modal>
         </>
     );
 }
