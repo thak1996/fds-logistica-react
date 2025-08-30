@@ -8,6 +8,7 @@ import styles from './ContactPage.module.css';
 export default function ContactPage() {
     const [formData, setFormData] = useState<ContactFormData>({ name: '', email: '', phone: '', subject: '', message: '' });
     const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+    const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
 
     const formatPhone = (value: string) => {
         const digits = value.replace(/\D/g, '');
@@ -30,26 +31,36 @@ export default function ContactPage() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (status === 'sending') return;
+        if (status === 'sending') return; // prevent double submit
         setStatus('sending');
         try {
             const result = await sendContactEmail(formData);
+            console.log('sendContactEmail result:', result);
             if (result.success) {
                 setStatus('success');
+                setErrorMessage(undefined);
+                // clear form
                 setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+                // auto-close modal after 4s
                 setTimeout(() => setStatus('idle'), 4000);
             } else {
+                // surface the server message for debugging
+                setErrorMessage(result.message ?? 'Resposta inesperada do servidor');
                 setStatus('error');
                 setTimeout(() => setStatus('idle'), 5000);
             }
         } catch (err) {
             console.error('Erro ao enviar contato:', err);
+            setErrorMessage(err instanceof Error ? err.message : String(err));
             setStatus('error');
             setTimeout(() => setStatus('idle'), 5000);
         }
     };
 
-    const closeModal = () => setStatus('idle');
+    const closeModal = () => {
+        setStatus('idle');
+        setErrorMessage(undefined);
+    };
 
     return (
         <>
@@ -145,6 +156,9 @@ export default function ContactPage() {
 
             <Modal isOpen={status === 'error'} onClose={closeModal} title="Erro no Envio" type="error">
                 <p>Ocorreu um erro. Por favor, tente novamente ou entre em contato por outro canal.</p>
+                {errorMessage && (
+                    <pre style={{ whiteSpace: 'pre-wrap', marginTop: '0.75rem', background: '#fff6f6', padding: '0.75rem', borderRadius: 6, color: '#7f1d1d' }}>{errorMessage}</pre>
+                )}
             </Modal>
         </>
     );
