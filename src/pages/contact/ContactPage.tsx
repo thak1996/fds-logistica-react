@@ -9,7 +9,6 @@ export default function ContactPage() {
     const [formData, setFormData] = useState<ContactFormData>({ name: '', email: '', phone: '', subject: '', message: '' });
     const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
 
-    // Simple phone formatter: keeps only digits and formats as (##) #####-#### or (##) ####-####
     const formatPhone = (value: string) => {
         const digits = value.replace(/\D/g, '');
         if (digits.length <= 2) return digits;
@@ -31,15 +30,13 @@ export default function ContactPage() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (status === 'sending') return; // prevent double submit
+        if (status === 'sending') return;
         setStatus('sending');
         try {
             const result = await sendContactEmail(formData);
             if (result.success) {
                 setStatus('success');
-                // clear form
                 setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
-                // auto-close modal after 4s
                 setTimeout(() => setStatus('idle'), 4000);
             } else {
                 setStatus('error');
