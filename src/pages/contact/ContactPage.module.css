@@ -1,7 +1,7 @@
 .pageWrapper {
   width: 100%;
   min-height: calc(100vh - 80px);
-  background: linear-gradient(to right, #ebf8ff, #d1fae5);
+  background: linear-gradient(90deg, #bfdbfe 0%, #bbf7d0 100%);
   display: flex;
   align-items: flex-start;
   justify-content: center;

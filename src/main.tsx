@@ -6,6 +6,7 @@ import MainLayout from './layouts/MainLayout';
 import HomePage from './pages/home/HomePage';
 import ContactPage from './pages/contact/ContactPage';
 import CompanyPage from './pages/company/CompanyPage';
+import ServicePage from './pages/service/ServicePage';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -15,6 +16,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route index element={<HomePage />} />
           <Route path="contact" element={<ContactPage />} />
           <Route path="company" element={<CompanyPage />} />
+          <Route path="service" element={<ServicePage />} />
         </Route>
       </Routes>
     </BrowserRouter>
