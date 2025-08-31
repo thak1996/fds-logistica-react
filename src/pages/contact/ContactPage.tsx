@@ -1,4 +1,3 @@
-// src/pages/ContactPage.tsx
 import { useState } from 'react';
 import SEO from '../../components/SEO';
 import Modal from '../../components/modals/Modal';
@@ -31,7 +30,7 @@ export default function ContactPage() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (status === 'sending') return; // prevent double submit
+        if (status === 'sending') return;
         setStatus('sending');
         try {
             const result = await sendContactEmail(formData);
@@ -39,12 +38,9 @@ export default function ContactPage() {
             if (result.success) {
                 setStatus('success');
                 setErrorMessage(undefined);
-                // clear form
                 setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
-                // auto-close modal after 4s
                 setTimeout(() => setStatus('idle'), 4000);
             } else {
-                // surface the server message for debugging
                 setErrorMessage(result.message ?? 'Resposta inesperada do servidor');
                 setStatus('error');
                 setTimeout(() => setStatus('idle'), 5000);
@@ -149,17 +145,8 @@ export default function ContactPage() {
                     </div>
                 </div>
             </div>
-
-            <Modal isOpen={status === 'success'} onClose={closeModal} title="Mensagem Enviada!" type="success">
-                <p>Sua mensagem foi recebida. Nossa equipe entrará em contato em breve.</p>
-            </Modal>
-
-            <Modal isOpen={status === 'error'} onClose={closeModal} title="Erro no Envio" type="error">
-                <p>Ocorreu um erro. Por favor, tente novamente ou entre em contato por outro canal.</p>
-                {errorMessage && (
-                    <pre style={{ whiteSpace: 'pre-wrap', marginTop: '0.75rem', background: '#fff6f6', padding: '0.75rem', borderRadius: 6, color: '#7f1d1d' }}>{errorMessage}</pre>
-                )}
-            </Modal>
+            <Modal isOpen={status === 'success'} onClose={closeModal} type="success" />
+            <Modal isOpen={status === 'error'} onClose={closeModal} type="error" debugMessage={errorMessage} />
         </>
     );
 }

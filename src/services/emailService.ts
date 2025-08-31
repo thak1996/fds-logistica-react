@@ -35,7 +35,6 @@ export async function sendContactEmail(formData: ContactFormData): Promise<{ suc
       console.error('Web3Forms responded with non-OK status', res.status, text);
       return { success: false, message: text || `HTTP ${res.status}` };
     }
-
     let json: unknown = null;
     try {
       json = text ? JSON.parse(text) : null;
@@ -56,7 +55,6 @@ export async function sendContactEmail(formData: ContactFormData): Promise<{ suc
         message: 'Request was sent but browser blocked the response (Failed to fetch). Check console/CORS settings.'
       };
     }
-
     return { success: false, message: errMsg };
   }
 }

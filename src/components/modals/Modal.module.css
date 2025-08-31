@@ -1,75 +1,112 @@
-/* src/components/modals/Modal.module.css */
 .overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.6);
-  z-index: 100;
+  background: rgba(0,0,0,0.55);
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 60;
+  padding: 1.25rem;
 }
-.panel {
-  background-color: white;
-  padding: 2rem;
-  border-radius: 8px;
-  max-width: 500px;
-  width: 90%;
+
+.container {
+  max-width: 520px;
+  width: 100%;
+}
+
+.content {
+  background: #fff;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px rgba(2,6,23,0.25);
   text-align: center;
-  position: relative;
 }
-.title {
-  font-size: 1.5rem;
+
+.iconWrap {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 0.5rem;
+  border-radius: 999px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* coloring based on data-type attribute */
+.iconWrap[data-type="success"] {
+  background: #e6f6ec;
+  color: #059669;
+}
+
+.iconWrap[data-type="error"] {
+  background: #fff1f2;
+  color: #b91c1c;
+}
+
+.iconSvg {
+  width: 28px;
+  height: 28px;
+}
+
+.titleSuccess {
+  color: #047857;
   font-weight: 700;
-  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  margin: 0.25rem 0 0.5rem;
 }
-.titleSuccess { color: #15803d; }
-.titleError { color: #be123c; }
+
+.titleError {
+  color: #7f1d1d;
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin: 0.25rem 0 0.5rem;
+}
+
 .message {
-  color: #4b5563;
-  margin-bottom: 1.5rem;
-}
-.closeButton {
-  background-color: #e5e7eb;
   color: #374151;
-  border: none;
-  padding: 0.5rem 1.5rem;
-  border-radius: 6px;
-  cursor: pointer;
-}/* src/components/modals/Modal.module.css */
-.overlay {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.6);
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  margin-bottom: 0.75rem;
+  font-size: 0.98rem;
 }
-.panel {
-  background-color: white;
-  padding: 2rem;
+
+.details {
+  background: #f8fafc;
+  border-radius: 6px;
+  padding: 0.75rem;
+  margin: 0.75rem 0;
+  text-align: left;
+  color: #374151;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.actions {
+  margin-top: 0.5rem;
+}
+
+.btnSuccess, .btnError {
+  border: none;
+  padding: 0.6rem 1.25rem;
   border-radius: 8px;
-  max-width: 500px;
-  width: 90%;
-  text-align: center;
-  position: relative;
-}
-.title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-}
-.titleSuccess { color: #15803d; }
-.titleError { color: #be123c; }
-.message {
-  color: #4b5563;
-  margin-bottom: 1.5rem;
-}
-.closeButton {
-  background-color: #e5e7eb;
-  color: #374151;
-  border: none;
-  padding: 0.5rem 1.5rem;
-  border-radius: 6px;
+  font-weight: 600;
   cursor: pointer;
+}
+
+.btnSuccess {
+  background: #059669;
+  color: #fff;
+}
+
+.btnSuccess:hover { background: #047857; }
+
+.btnError {
+  background: #dc2626;
+  color: #fff;
+}
+
+.btnError:hover { background: #b91c1c; }
+
+@media (max-width: 420px) {
+  .content { padding: 1rem; }
+  .titleSuccess, .titleError { font-size: 1.125rem; }
+  .iconWrap { width:56px; height:56px; }
 }
