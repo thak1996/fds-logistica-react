@@ -10,7 +10,13 @@ type NavLinkProps = {
 
 export default function NavLink({ href, className, activeClassName, children }: NavLinkProps) {
     const location = useLocation();
-    const isActive = location.pathname === href;
+    const base = (import.meta.env.BASE_URL || '').replace(/\/$/, '');
+
+    // Normalize paths to compare independent of basename and trailing slashes
+    const normalize = (p: string) => p.replace(/\/$/, '') || '/';
+    const current = normalize(location.pathname.replace(new RegExp(`^${base}`), '') || '/');
+    const target = normalize(href.replace(new RegExp(`^${base}`), '') || '/');
+    const isActive = current === target;
     const allClassNames = `${className} ${isActive ? activeClassName : ''}`;
 
     return (

@@ -10,18 +10,19 @@ export default function SEO({ title, description, image }: SEOProps) {
     const defaultImage = `${baseUrl}/images/fds-logo-og.png`;
     const finalImage = image ? `${baseUrl}${image}` : defaultImage;
     const fullTitle = `${title} | ${siteName}`;
+    const path = typeof window !== 'undefined' ? window.location.pathname : '/';
 
     return (
         <>
             <title>{fullTitle}</title>
             <meta name="description" content={description} />
-            <link rel="canonical" href={baseUrl + window.location.pathname} />
+            <link rel="canonical" href={baseUrl + path} />
 
             {/* Open Graph */}
             <meta property="og:title" content={fullTitle} />
             <meta property="og:description" content={description} />
             <meta property="og:image" content={finalImage} />
-            <meta property="og:url" content={baseUrl + window.location.pathname} />
+            <meta property="og:url" content={baseUrl + path} />
             <meta property="og:type" content="website" />
             <meta property="og:site_name" content={siteName} />
 

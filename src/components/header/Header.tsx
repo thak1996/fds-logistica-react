@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import NavLink from './NavLink';
 import styles from './Header.module.css';
 
@@ -16,12 +17,13 @@ export default function Header() {
         };
     }, [isMenuOpen]);
 
+    const base = import.meta.env.BASE_URL?.replace(/\/$/, '') || '';
     const navLinks = [
-        { href: '/', label: 'Home' },
-        { href: '/company', label: 'A Empresa' },
-        { href: '/service', label: 'Serviços' },
-        { href: '/quote', label: 'Orçamento' },
-        { href: '/contact', label: 'Contato' },
+        { href: `${base}/`, label: 'Home' },
+        { href: `${base}/company`, label: 'A Empresa' },
+        { href: `${base}/service`, label: 'Serviços' },
+        { href: `${base}/quote`, label: 'Orçamento' },
+        { href: `${base}/contact`, label: 'Contato' },
     ];
 
     return (
@@ -29,9 +31,9 @@ export default function Header() {
             <header className={styles.header}>
                 <div className={styles.container}>
                     <div className={styles.logoWrapper}>
-                        <a href="/">
+                        <Link to={base + '/'}>
                             <img src="https://i.imgur.com/eP2y6gB.jpeg" alt="Logo FDS" className={styles.logoImage} />
-                        </a>
+                        </Link>
                         <span className={styles.logoText}>FDS Logística e Terceirização</span>
                     </div>
 

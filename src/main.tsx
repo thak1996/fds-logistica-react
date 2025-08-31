@@ -8,19 +8,22 @@ import ContactPage from './pages/contact/ContactPage';
 import CompanyPage from './pages/company/CompanyPage';
 import ServicePage from './pages/service/ServicePage';
 import QuotePage from './pages/quote/QuotePage';
+import ErrorBoundary from './components/ErrorBoundary';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <BrowserRouter basename={import.meta.env.BASE_URL}>
-      <Routes>
-        <Route path="/" element={<MainLayout />}>
-          <Route index element={<HomePage />} />
-          <Route path="contact" element={<ContactPage />} />
-          <Route path="company" element={<CompanyPage />} />
-          <Route path="service" element={<ServicePage />} />
-          <Route path="quote" element={<QuotePage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter basename={import.meta.env.BASE_URL}>
+        <Routes>
+          <Route path="/" element={<MainLayout />}>
+            <Route index element={<HomePage />} />
+            <Route path="contact" element={<ContactPage />} />
+            <Route path="company" element={<CompanyPage />} />
+            <Route path="service" element={<ServicePage />} />
+            <Route path="quote" element={<QuotePage />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </ErrorBoundary>
   </React.StrictMode>,
 );
