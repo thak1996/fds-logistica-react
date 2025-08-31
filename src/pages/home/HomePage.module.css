@@ -34,10 +34,16 @@ html, body {
 }
 
 .heroTitle {
-    font-size: 2.5rem;
+    font-size: 2.25rem;
     font-weight: 800;
     color: #1e40af;
     line-height: 1.2;
+}
+@media (min-width: 768px) {
+  .heroTitle { font-size: 2.5rem; }
+}
+@media (min-width: 1280px) {
+  .heroTitle { font-size: 3rem; }
 }
 
 .heroSubtitle {
@@ -82,6 +88,12 @@ html, body {
   box-shadow: 0 8px 24px 0 rgba(0,0,0,0.12);
 }
 
+/* Optional container for image on larger screens */
+.heroImageContainer { display: flex; justify-content: center; }
+@media (min-width: 768px) {
+  .heroImageContainer { justify-content: flex-end; }
+}
+
 /* --- Seção Banner --- */
 .bannerSection {
   background-color: #ffffff;
@@ -89,6 +101,9 @@ html, body {
   font-size: 1.25rem;
   font-weight: 500;
   color: #374151;
+}
+@media (max-width: 640px) {
+  .bannerSection { font-size: 1.1rem; }
 }
 
 /* --- Seção de Cards --- */

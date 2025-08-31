@@ -126,3 +126,8 @@
 }
 .infoBlock h3 { font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; }
 .infoBlock p { color: #4b5563; }
+
+@media (max-width: 640px) {
+  .title { font-size: 1.75rem; }
+  .card { padding: 1.25rem; }
+}
