@@ -20,7 +20,7 @@ export default function Modal({
   title,
   message,
   details,
-  debugMessage
+  // debugMessage
 }: ModalProps) {
   if (!isOpen) return null;
 
@@ -82,11 +82,12 @@ export default function Modal({
             </div>
           )}
 
-          {isError && debugMessage && (
+
+          {/* {isError && debugMessage && (
             <pre style={{ whiteSpace: 'pre-wrap', marginTop: '0.75rem', background: '#fff6f6', padding: '0.75rem', borderRadius: 6, color: '#7f1d1d' }}>
               {debugMessage}
             </pre>
-          )}
+          )} */}
 
           <div className={styles.actions}>
             <button className={isError ? styles.btnError : styles.btnSuccess} onClick={onClose}>
