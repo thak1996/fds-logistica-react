@@ -17,13 +17,13 @@ export default function Header() {
         };
     }, [isMenuOpen]);
 
-    const base = import.meta.env.BASE_URL?.replace(/\/$/, '') || '';
+    // IMPORTANT: do not prefix with basename here. BrowserRouter applies basename automatically.
     const navLinks = [
-        { href: `${base}/`, label: 'Home' },
-        { href: `${base}/company`, label: 'A Empresa' },
-        { href: `${base}/service`, label: 'Serviços' },
-        { href: `${base}/quote`, label: 'Orçamento' },
-        { href: `${base}/contact`, label: 'Contato' },
+        { href: '/', label: 'Home' },
+        { href: '/company', label: 'A Empresa' },
+        { href: '/service', label: 'Serviços' },
+        { href: '/quote', label: 'Orçamento' },
+        { href: '/contact', label: 'Contato' },
     ];
 
     return (
@@ -31,7 +31,7 @@ export default function Header() {
             <header className={styles.header}>
                 <div className={styles.container}>
                     <div className={styles.logoWrapper}>
-                        <Link to={base + '/'}>
+                        <Link to={'/'}>
                             <img src="https://i.imgur.com/eP2y6gB.jpeg" alt="Logo FDS" className={styles.logoImage} />
                         </Link>
                         <span className={styles.logoText}>FDS Logística e Terceirização</span>
