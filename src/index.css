@@ -16,7 +16,6 @@ body {
   background-color: #fff;
   color: #111827;
   padding-top: var(--header-height);
-  padding-bottom: var(--header-height);
 }
 
 #root {
@@ -55,7 +54,7 @@ input, textarea, select, button {
 
 /* Media: small screens */
 @media (max-width: 640px) {
-  body { padding-top: 72px; padding-bottom: 72px; }
+  body { padding-top: 72px; }
   .container { padding-left: 1rem; padding-right: 1rem; }
 }
 

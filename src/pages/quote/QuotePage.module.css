@@ -2,7 +2,7 @@
   min-height: 100vh;
   width: 100%;
   background: linear-gradient(to right, #ebf8ff, #d1fae5);
-  padding: 2.5rem 1rem;
+  padding: 2.5rem 1rem 2rem;
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -97,8 +97,8 @@
 
 .actions {
   text-align: center;
-  margin-top: 1.5rem;
-  padding-bottom: 1.5rem;
+  margin-top: 1rem;
+  padding-bottom: 0.5rem;
 }
 
 .submit {
@@ -121,5 +121,7 @@
   .grid {
     grid-template-columns: 1fr;
   }
-  .pageWrapper { padding-top: 1.5rem; }
+  .pageWrapper { 
+    padding-top: 1.5rem;
+  }
 }

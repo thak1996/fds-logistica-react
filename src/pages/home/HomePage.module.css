@@ -115,7 +115,7 @@ html, body {
 }
 @media (max-width: 768px) {
   .cardsSection {
-    padding-bottom: 80px;
+  padding-bottom: 1.5rem;
   }
 }
 
